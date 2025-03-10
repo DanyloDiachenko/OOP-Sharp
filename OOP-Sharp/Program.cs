@@ -9,5 +9,30 @@ namespace OOP_Sharp
             Console.WriteLine("Hello World!");
         }
     }
+
+    class Vacancy
+    {
+
+    }
+
+    class Category
+    {
+
+    }
+
+    class Resume
+    {
+
+    }
+
+    class Unemployed
+    {
+
+    }
+
+    class Agency
+    {
+        
+    }
 }
 
