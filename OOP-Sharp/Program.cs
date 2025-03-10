@@ -1,182 +1,87 @@
-﻿namespace OOP_Sharp
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace JobMarket
 {
     class Program
     {
-        public static List<Unemployed> unemployeds = [];
-        public static List<Agency> agencies = [];
-        public static List<Vacancy> vacancies = [];
-        public static List<Resume> resumes = [];
-        public static List<Category> categories = [];
-
-        public void SortVacancies()
-        {
-            vacancies.Sort((a, b) => a.Category.Title.CompareTo(b.Category.Title));
-        }
-
-        public void SortResumes()
-        {
-            resumes.Sort((a, b) => a.Description.CompareTo(b.Description));
-        }
-
-        public void GetVacancies()
-        {
-            foreach (Vacancy vacancy in vacancies)
-            {
-                vacancy.Get();
-            }
-        }
-
-        public void GetVacanciesByTitle(string title)
-        {
-            foreach (Vacancy vacancy in vacancies)
-            {
-                if (vacancy.Title.ToLower().Contains(title.ToLower()))
-                {
-                    vacancy.Get();
-                }
-            }
-        }
-
-        public void GetUnemployedsByFirstName(string firstName)
-        {
-            foreach (Unemployed unemployed in unemployeds)
-            {
-                if (unemployed.FirstName.ToLower().Contains(firstName.ToLower()))
-                {
-                    unemployed.Get();
-                }
-            }
-        }
-
-        public void GetResumes()
-        {
-            foreach (Resume resume in resumes)
-            {
-                resume.Get();
-            }
-        }
-
-        public void DeleteUnemployed(Unemployed unemployed)
-        {
-            unemployeds.Remove(unemployed);
-        }
-
-        public void GetUnemployeds()
-        {
-            foreach (Unemployed unemployed in unemployeds)
-            {
-                unemployed.Get();
-            }
-        }
-
-        public void SortUnemployeds(string sortBy)
-        {
-            switch (sortBy)
-            {
-                case "firstName":
-                    unemployeds.Sort((a, b) => a.FirstName.CompareTo(b.FirstName));
-                    break;
-                case "lastName":
-                    unemployeds.Sort((a, b) => a.LastName.CompareTo(b.LastName));
-                    break;
-                default:
-                    break;
-            }
-        }
-
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            JobService jobService = new JobService();
+            Console.WriteLine("Welcome to the Job Market!");
 
-            Category itCategory = new Category("IT");
-            Category designCategory = new Category("Design");
-            Category managementCategory = new Category("Management");
+            Category itCategory = new("IT");
+            Category designCategory = new("Design");
+            Category managementCategory = new("Management");
 
-            Vacancy developerVacancy = new Vacancy("Developer", itCategory);
-            Vacancy designerVacancy = new Vacancy("Designer", designCategory);
-            Vacancy managerVacancy = new Vacancy("Manager", managementCategory);
+            jobService.AddCategory(itCategory);
+            jobService.AddCategory(designCategory);
+            jobService.AddCategory(managementCategory);
+            jobService.AddCategory(itCategory);
 
-            Resume developerResume1 = new Resume("Junior Developer with 1 year of experience");
-            Unemployed developerUnemployed1 = new Unemployed("John", "Doe", "john.doe@example.com", "1234567890", developerResume1);
-            Resume developerResume2 = new Resume("Middle Developer with 5 years of experience");
-            Unemployed developerUnemployed2 = new Unemployed("Jane", "Doe", "jane.doe@example.com", "1234567890", developerResume2);
-            Resume developerResume3 = new Resume("Senior Developer with 10 years of experience");
-            Unemployed developerUnemployed3 = new Unemployed("Jim", "Beam", "jim.beam@example.com", "1234567890", developerResume3);
+            Company techCorp = new("TechCorp", "contact@techcorp.com");
+            Company designHub = new("DesignHub", "info@designhub.com");
+            jobService.AddCompany(techCorp);
+            jobService.AddCompany(designHub);
 
-            Resume designerResume1 = new Resume("Junior Designer with 1 year of experience");
-            Unemployed designerUnemployed1 = new Unemployed("John", "Doe", "john.doe@example.com", "1234567890", designerResume1);
-            Resume designerResume2 = new Resume("Middle Designer with 5 years of experience");
-            Unemployed designerUnemployed2 = new Unemployed("Jane", "Doe", "jane.doe@example.com", "1234567890", designerResume2);
-            Resume designerResume3 = new Resume("Senior Designer with 10 years of experience");
-            Unemployed designerUnemployed3 = new Unemployed("Jim", "Beam", "jim.beam@example.com", "1234567890", designerResume3);
+            jobService.AddVacancy(new Vacancy("Developer", itCategory, 10000, techCorp));
+            jobService.AddVacancy(new Vacancy("Designer", designCategory, 8000, designHub));
+            jobService.AddVacancy(new Vacancy("Manager", managementCategory, 12000, techCorp));
 
-            Resume managerResume1 = new Resume("Junior Manager with 1 year of experience");
-            Unemployed managerUnemployed1 = new Unemployed("John", "Doe", "john.doe@example.com", "1234567890", managerResume1);
-            Resume managerResume2 = new Resume("Middle Manager with 5 years of experience");
-            Unemployed managerUnemployed2 = new Unemployed("Jane", "Doe", "jane.doe@example.com", "1234567890", managerResume2);
-            Resume managerResume3 = new Resume("Senior Manager with 10 years of experience");
-            Unemployed managerUnemployed3 = new Unemployed("Jim", "Beam", "jim.beam@example.com", "1234567890", managerResume3);
+            jobService.AddUnemployed(new Unemployed("John", "Doe", "john.doe@example.com", "1234567890", new Resume("Junior Developer, 1 year experience")));
+            jobService.AddUnemployed(new Unemployed("Jane", "Doe", "jane.doe@example.com", "0987654321", new Resume("Middle Developer, 5 years experience")));
+            jobService.AddUnemployed(new Unemployed("Jim", "Beam", "jim.beam@example.com", "5555555555", new Resume("Senior Developer, 10 years experience")));
 
-            categories.Add(itCategory);
-            categories.Add(designCategory);
-            categories.Add(managementCategory);
+            Console.WriteLine("\n=== Testing ===");
+            Console.WriteLine("\n1. All data:");
+            jobService.GetAllData();
 
-            resumes.Add(developerResume1);
-            resumes.Add(developerResume2);
-            resumes.Add(developerResume3);
-            resumes.Add(designerResume1);
-            resumes.Add(designerResume2);
-            resumes.Add(designerResume3);
-            resumes.Add(managerResume1);
-            resumes.Add(managerResume2);
-            resumes.Add(managerResume3);
+            Console.WriteLine("\n2. Sort vacancies by category and salary:");
+            jobService.SortVacancies();
 
-            unemployeds.Add(developerUnemployed1);
-            unemployeds.Add(developerUnemployed2);
-            unemployeds.Add(developerUnemployed3);
-            unemployeds.Add(designerUnemployed1);
-            unemployeds.Add(designerUnemployed2);
-            unemployeds.Add(designerUnemployed3);
-            unemployeds.Add(managerUnemployed1);
-            unemployeds.Add(managerUnemployed2);
-            unemployeds.Add(managerUnemployed3);
+            Console.WriteLine("\n3. Search vacancies by keyword 'Dev':");
+            jobService.SearchVacancies("Dev");
 
-            vacancies.Add(developerVacancy);
-            vacancies.Add(designerVacancy);
-            vacancies.Add(managerVacancy);
+            Console.WriteLine("\n4. Search unemployed by keyword 'Doe':");
+            jobService.SearchUnemployeds("Doe");
+
+            Console.WriteLine("\n5. Sort unemployed by last name:");
+            jobService.SortUnemployedsByLastName();
+
+            Console.WriteLine("\n6. Get all companies:");
+            jobService.GetAllCompanies();
         }
     }
 
     class Vacancy
     {
         public string Title { get; set; }
-        public Category Category { get; private set; }
+        public double Salary { get; set; }
+        public Category Category { get; set; }
+        public Company Company { get; set; }
 
-        public Vacancy(string title, Category category)
+        public Vacancy(string title, Category category, double salary, Company company)
         {
-            this.Title = title;
-            this.Category = category;
-        }
-
-        public void Update(string newTitle, Category newCategory)
-        {
-            this.Title = newTitle;
-            this.Category = newCategory;
+            Title = title;
+            Category = category;
+            Salary = salary;
+            Company = company;
         }
 
         public void Get()
         {
-            Console.WriteLine($"Vacancy: {this.Title}, Category: {this.Category.Title}");
+            Console.WriteLine($"Vacancy: {Title}, Category: {Category.Title}, Salary: {Salary}, Company: {Company.Name}");
         }
     }
 
     class Category
     {
-        public string Title { get; set; }
+        public string Title { get; private set; }
 
         public Category(string title)
         {
-            this.Title = title;
+            Title = title;
         }
     }
 
@@ -186,17 +91,7 @@
 
         public Resume(string description)
         {
-            this.Description = description;
-        }
-
-        public void Update(string newDescription)
-        {
-            this.Description = newDescription;
-        }
-
-        public void Get()
-        {
-            Console.WriteLine($"Resume: {this.Description}");
+            Description = description;
         }
     }
 
@@ -210,49 +105,199 @@
 
         public Unemployed(string firstName, string lastName, string email, string phone, Resume resume)
         {
-            this.FirstName = firstName;
-            this.LastName = lastName;
-            this.Email = email;
-            this.Phone = phone;
-            this.Resume = resume;
-        }
-
-        public void Update(string newFirstName, string newLastName, string newEmail, string newPhone, Resume newResume)
-        {
-            this.FirstName = newFirstName;
-            this.LastName = newLastName;
-            this.Email = newEmail;
-            this.Phone = newPhone;
-            this.Resume = newResume;
+            FirstName = firstName;
+            LastName = lastName;
+            Email = email;
+            Phone = phone;
+            Resume = resume;
         }
 
         public void Get()
         {
-            Console.WriteLine($"Unemployed: {this.FirstName} {this.LastName}, Email: {this.Email}, Phone: {this.Phone}, Resume: {this.Resume.Description}");
+            Console.WriteLine($"Unemployed: {FirstName} {LastName}, Email: {Email}, Phone: {Phone}, Resume: {Resume.Description}");
         }
-
     }
 
-    class Agency
+    class Company
     {
-        public string Title { get; set; }
-        public Vacancy? Vacancy { get; set; }
+        public string Name { get; set; }
+        public string Contact { get; set; }
 
-        public Agency(string title, Vacancy vacancy)
+        public Company(string name, string contact)
         {
-            this.Title = title;
-            this.Vacancy = vacancy;
+            Name = name;
+            Contact = contact;
         }
 
-        public void CreateVacancy(Vacancy vacancy)
+        public void Get()
         {
-            this.Vacancy = vacancy;
+            Console.WriteLine($"Company: {Name}, Contact: {Contact}");
+        }
+    }
+
+    class JobService
+    {
+        private List<Vacancy> Vacancies { get; } = new();
+        private List<Unemployed> Unemployeds { get; } = new();
+        private List<Category> Categories { get; } = new();
+        private List<Company> Companies { get; } = new();
+
+        public void AddVacancy(Vacancy vacancy)
+        {
+            Vacancies.Add(vacancy);
         }
 
-        public void DeleteVacancy(Vacancy vacancy)
+        public void UpdateVacancy(Vacancy oldVacancy, Vacancy newVacancy)
         {
-            this.Vacancy = null;
+            int index = Vacancies.IndexOf(oldVacancy);
+            if (index != -1)
+            {
+                Vacancies[index] = newVacancy;
+            }
+            else
+            {
+                Console.WriteLine("Vacancy not found.");
+            }
+        }
+
+        public void RemoveVacancy(Vacancy vacancy)
+        {
+            Vacancies.Remove(vacancy);
+        }
+
+        public void SortVacancies()
+        {
+            Vacancies.OrderBy(v => v.Category.Title).ThenByDescending(v => v.Salary).ToList().ForEach(v => v.Get());
+        }
+
+        public void GetVacancy(string title)
+        {
+            Vacancies.Where(v => v.Title.Contains(title, StringComparison.OrdinalIgnoreCase)).ToList().ForEach(v => v.Get());
+        }
+
+        public void AddCategory(Category category)
+        {
+            if (!Categories.Any(c => c.Title == category.Title))
+            {
+                Categories.Add(category);
+            }
+            else
+            {
+                Console.WriteLine($"Category '{category.Title}' already exists.");
+            }
+        }
+
+        public void RemoveCategory(Category category)
+        {
+            Categories.Remove(category);
+        }
+
+        public void AddUnemployed(Unemployed unemployed)
+        {
+            Unemployeds.Add(unemployed);
+        }
+
+        public void UpdateUnemployed(Unemployed oldUnemployed, Unemployed newUnemployed)
+        {
+            int index = Unemployeds.IndexOf(oldUnemployed);
+            if (index != -1)
+            {
+                Unemployeds[index] = newUnemployed;
+            }
+            else
+            {
+                Console.WriteLine("Unemployed not found.");
+            }
+        }
+
+        public void RemoveUnemployed(Unemployed unemployed)
+        {
+            Unemployeds.Remove(unemployed);
+        }
+
+        public void GetUnemployed(string name)
+        {
+            Unemployeds.Where(u => u.FirstName.Contains(name, StringComparison.OrdinalIgnoreCase) || u.LastName.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList().ForEach(u => u.Get());
+        }
+
+        public void GetAllUnemployeds()
+        {
+            Unemployeds.ForEach(u => u.Get());
+        }
+
+        public void SortUnemployedsByName()
+        {
+            Unemployeds.OrderBy(u => u.FirstName).ToList().ForEach(u => u.Get());
+        }
+
+        public void SortUnemployedsByLastName()
+        {
+            Unemployeds.OrderBy(u => u.LastName).ToList().ForEach(u => u.Get());
+        }
+
+        public void AddCompany(Company company)
+        {
+            Companies.Add(company);
+        }
+
+        public void UpdateCompany(Company oldCompany, Company newCompany)
+        {
+            int index = Companies.IndexOf(oldCompany);
+            if (index != -1)
+            {
+                Companies[index] = newCompany;
+            }
+            else
+            {
+                Console.WriteLine("Company not found.");
+            }
+        }
+
+        public void RemoveCompany(Company company)
+        {
+            Companies.Remove(company);
+        }
+
+        public void GetCompany(string name)
+        {
+            Companies.Where(c => c.Name.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList().ForEach(c => c.Get());
+        }
+
+        public void GetAllCompanies()
+        {
+            Companies.ForEach(c => c.Get());
+        }
+
+        public void SortCompaniesByName()
+        {
+            Companies.OrderBy(c => c.Name).ToList().ForEach(c => c.Get());
+        }
+
+        public void SearchVacancies(string keyword)
+        {
+            Vacancies.Where(v => v.Title.Contains(keyword, StringComparison.OrdinalIgnoreCase)).ToList().ForEach(v => v.Get());
+        }
+
+        public void SearchUnemployeds(string keyword)
+        {
+            Unemployeds.Where(u => u.FirstName.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                                  u.LastName.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                                  u.Resume.Description.Contains(keyword, StringComparison.OrdinalIgnoreCase)).ToList().ForEach(u => u.Get());
+        }
+
+        public void GetAllData()
+        {
+            Console.WriteLine("\n--- Vacancies ---");
+            Vacancies.ForEach(v => v.Get());
+
+            Console.WriteLine("\n--- Unemployeds ---");
+            Unemployeds.ForEach(u => u.Get());
+
+            Console.WriteLine("\n--- Companies ---");
+            Companies.ForEach(c => c.Get());
+
+            Console.WriteLine("\n--- Categories ---");
+            Categories.ForEach(c => Console.WriteLine($"Category: {c.Title}"));
         }
     }
 }
-
