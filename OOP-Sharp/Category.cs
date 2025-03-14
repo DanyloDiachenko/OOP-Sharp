@@ -1,9 +1,6 @@
 class Category
 {
-    public string Title { get; private set; }
-
-    public Category(string title)
-    {
-        Title = title;
-    }
+    public string Name { get; set; }
+    public List<Vacancy> Vacancies { get; set; } = new List<Vacancy>();
+    public List<Resume> Resumes { get; set; } = new List<Resume>();
 }
