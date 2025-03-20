@@ -9,6 +9,55 @@ class JobManagementSystem
         Categories.Add(category);
     }
 
+    public void PrintCategories(List<Category> categories)
+    {
+        foreach (var category in categories)
+        {
+            Console.WriteLine($"Категорія: {category.Name}");
+
+            foreach (var vacancy in category.Vacancies)
+            {
+                Console.WriteLine($"Вакансія: {vacancy.Title}, {vacancy.Description}, {vacancy.Employer.Name}");
+            }
+            foreach (var resume in category.Resumes)
+            {
+                Console.WriteLine($"Резюме: {resume.Name}, {resume.Skills}, {resume.JobSeeker.FirstName} {resume.JobSeeker.LastName}");
+            }
+        }
+    }
+
+    public void PrintVacancies(List<Vacancy> vacancies)
+    {
+        foreach (var vacancy in vacancies)
+        {
+            Console.WriteLine($"Вакансія: {vacancy.Title}, {vacancy.Description}, {vacancy.Employer.Name}");
+        }
+    }
+
+    public void PrintResumes(List<Resume> resumes)
+    {
+        foreach (var resume in resumes)
+        {
+            Console.WriteLine($"Резюме: {resume.Name}, {resume.Skills}, {resume.JobSeeker.FirstName} {resume.JobSeeker.LastName}");
+        }
+    }
+
+    public void PrintJobSeekers(List<JobSeeker> jobSeekers)
+    {
+        foreach (var jobSeeker in jobSeekers)
+        {
+            Console.WriteLine($"Шукач: {jobSeeker.FirstName} {jobSeeker.LastName}, {jobSeeker.ContactInfo}");
+        }
+    }
+
+    public void PrintCompanies(List<Company> companies)
+    {
+        foreach (var company in companies)
+        {
+            Console.WriteLine($"Компанія: {company.Name}, {company.ContactInfo}");
+        }
+    }
+
     public void AddVacancyToCategory(string categoryName, Vacancy vacancy)
     {
         var category = Categories.FirstOrDefault(c => c.Name == categoryName);
@@ -28,7 +77,7 @@ class JobManagementSystem
         vacancy.Employer = employer;
     }
 
-    public Vacancy GetVacancy(string title)
+    public Vacancy? GetVacancy(string title)
     {
         return Categories.SelectMany(c => c.Vacancies).FirstOrDefault(v => v.Title == title);
     }
@@ -57,7 +106,7 @@ class JobManagementSystem
         resume.JobSeeker = jobSeeker;
     }
 
-    public Resume GetResume(string name)
+    public Resume? GetResume(string name)
     {
         return Categories.SelectMany(c => c.Resumes).FirstOrDefault(r => r.Name == name);
     }
@@ -84,9 +133,9 @@ class JobManagementSystem
         seeker.ContactInfo = contactInfo;
     }
 
-    public JobSeeker GetJobSeeker(string firstName, string lastName)
+    public JobSeeker? GetJobSeeker(string title)
     {
-        return JobSeekers.FirstOrDefault(js => js.FirstName == firstName && js.LastName == lastName);
+        return JobSeekers.FirstOrDefault(js => js.FirstName.Contains(title) || js.LastName.Contains(title));
     }
 
     public List<JobSeeker> GetAllJobSeekers()
@@ -120,7 +169,7 @@ class JobManagementSystem
         company.ContactInfo = contactInfo;
     }
 
-    public Company GetCompany(string name)
+    public Company? GetCompany(string name)
     {
         return Companies.FirstOrDefault(c => c.Name == name);
     }
@@ -139,7 +188,9 @@ class JobManagementSystem
     {
         return Categories.SelectMany(c => c.Vacancies)
             .Where(v => v.Title.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                        v.Description.Contains(keyword, StringComparison.OrdinalIgnoreCase))
+                        v.Description.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                        v.Employer.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                        v.Employer.ContactInfo.Contains(keyword, StringComparison.OrdinalIgnoreCase))
             .ToList();
     }
 

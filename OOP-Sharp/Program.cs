@@ -52,14 +52,10 @@ class Program
         system.UpdateResume(ivanResume, "Резюме Івана", "C#, .NET, SQL", ivan);
         Console.WriteLine("Оновлено вакансію до 'Старший розробник' та резюме з новими навичками 'C#, .NET, SQL'.");
 
-        Vacancy vacancy = system.GetVacancy("Старший розробник");
-        Resume resume = system.GetResume("Резюме Івана");
-        Console.WriteLine($"Отримано вакансію: {vacancy?.Title}, резюме: {resume?.Name}");
-
         List<Vacancy> sortedVacancies = system.GetSortedVacancies();
         List<Resume> sortedResumes = system.GetSortedResumes();
-        Console.WriteLine("Відсортовані вакансії: " + string.Join(", ", sortedVacancies.Select(v => v.Title)));
-        Console.WriteLine("Відсортовані резюме: " + string.Join(", ", sortedResumes.Select(r => r.Name)));
+        system.PrintVacancies(sortedVacancies);
+        system.PrintResumes(sortedResumes);
 
         JobSeeker petro = new JobSeeker { FirstName = "Петро", LastName = "Сидоренко", ContactInfo = "petro@example.com" };
         system.AddJobSeeker(petro);
@@ -67,12 +63,12 @@ class Program
         system.RemoveJobSeeker(petro);
         Console.WriteLine("Додано шукача 'Петро', оновлено контакт Івана, видалено Петра.");
 
-        JobSeeker foundSeeker = system.GetJobSeeker("Марія", "Іваненко");
+        JobSeeker? foundSeeker = system.GetJobSeeker("Марія");
         List<JobSeeker> allSeekers = system.GetAllJobSeekers();
         List<JobSeeker> sortedByName = system.GetSortedJobSeekersByName();
         Console.WriteLine($"Отримано шукача: {foundSeeker?.FirstName} {foundSeeker?.LastName}");
-        Console.WriteLine("Всі шукачі: " + string.Join(", ", allSeekers.Select(s => s.FirstName)));
-        Console.WriteLine("Відсортовані за іменем: " + string.Join(", ", sortedByName.Select(s => s.FirstName)));
+        system.PrintJobSeekers(allSeekers);
+        system.PrintJobSeekers(sortedByName);
 
         Company newCompany = new Company { Name = "NewTech", ContactInfo = "newtech@example.com" };
         system.AddCompany(newCompany);
@@ -80,16 +76,16 @@ class Program
         system.RemoveCompany(newCompany);
         Console.WriteLine("Додано 'NewTech', оновлено 'TechCorp' до 'TechCorp Ltd', видалено 'NewTech'.");
 
-        Company foundCompany = system.GetCompany("TechCorp Ltd");
+        Company? foundCompany = system.GetCompany("TechCorp Ltd");
         List<Company> allCompanies = system.GetAllCompanies();
         List<Company> sortedCompanies = system.GetSortedCompaniesByName();
         Console.WriteLine($"Отримано компанію: {foundCompany?.Name}");
-        Console.WriteLine("Всі компанії: " + string.Join(", ", allCompanies.Select(c => c.Name)));
-        Console.WriteLine("Відсортовані компанії: " + string.Join(", ", sortedCompanies.Select(c => c.Name)));
+        system.PrintCompanies(allCompanies);
+        system.PrintCompanies(sortedCompanies);
 
         List<Vacancy> foundVacancies = system.SearchVacancies("розробник");
         List<JobSeeker> foundSeekers = system.SearchJobSeekers("Іван");
-        Console.WriteLine("Знайдені вакансії за словом 'розробник': " + string.Join(", ", foundVacancies.Select(v => v.Title)));
-        Console.WriteLine("Знайдені шукачі за словом 'Іван': " + string.Join(", ", foundSeekers.Select(s => s.FirstName)));
+        system.PrintVacancies(foundVacancies);
+        system.PrintJobSeekers(foundSeekers);
     }
 }

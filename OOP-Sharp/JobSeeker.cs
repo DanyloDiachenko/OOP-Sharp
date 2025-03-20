@@ -1,6 +1,4 @@
-class JobSeeker
+class JobSeeker : Human
 {
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
     public string ContactInfo { get; set; }
 }
