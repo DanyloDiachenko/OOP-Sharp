@@ -13,31 +13,25 @@ class Program
     {
         JobManagementSystem system = new JobManagementSystem();
 
-        Category itCategory = new Category { Name = "IT", Vacancies = new List<Vacancy>(), Resumes = new List<Resume>() };
+        Category itCategory = new Category("IT");
         system.AddCategory(itCategory);
 
-        Company techCorp = new Company { Name = "TechCorp", ContactInfo = "info@techcorp.com" };
+        Company techCorp = new Company("TechCorp", "info@techcorp.com");
         system.AddCompany(techCorp);
 
-        JobSeeker ivan = new JobSeeker { FirstName = "Іван", LastName = "Петренко", ContactInfo = "ivan@example.com" };
-        system.AddJobSeeker(ivan);
-
-        Vacancy developerVacancy = new Vacancy { Title = "Розробник", Description = "Розробка ПЗ", Employer = techCorp };
-        system.AddVacancyToCategory("IT", developerVacancy);
-
-        Resume ivanResume = new Resume { Name = "Резюме Івана", Skills = "C#, .NET", JobSeeker = ivan };
-        system.AddResumeToCategory("IT", ivanResume);
-
-        Company designStudio = new Company { Name = "DesignStudio", ContactInfo = "info@designstudio.com" };
+        Company designStudio = new Company("DesignStudio", "info@designstudio.com");
         system.AddCompany(designStudio);
 
-        JobSeeker maria = new JobSeeker { FirstName = "Марія", LastName = "Іваненко", ContactInfo = "maria@example.com" };
-        system.AddJobSeeker(maria);
+        Vacancy developerVacancy = new Vacancy("Розробник", "Розробка ПЗ", techCorp);
+        system.AddVacancyToCategory("IT", developerVacancy);
 
-        Vacancy designerVacancy = new Vacancy { Title = "Дизайнер", Description = "Розробка UI/UX", Employer = designStudio };
+        Vacancy designerVacancy = new Vacancy("Дизайнер", "Розробка UI/UX", designStudio);
         system.AddVacancyToCategory("IT", designerVacancy);
 
-        Resume mariaResume = new Resume { Name = "Резюме Марії", Skills = "Photoshop, Figma", JobSeeker = maria };
+        Resume ivanResume = new Resume("Резюме Івана", "C#, .NET", "Іван", "Петренко", "ivan@example.com");
+        system.AddResumeToCategory("IT", ivanResume);
+
+        Resume mariaResume = new Resume("Резюме Марії", "Photoshop, Figma", "Марія", "Іваненко", "maria@example.com");
         system.AddResumeToCategory("IT", mariaResume);
 
         Console.WriteLine("=== Тестування методів JobManagementSystem ===");
@@ -49,7 +43,7 @@ class Program
         Console.WriteLine("Видалено вакансію 'Розробник' та резюме 'Резюме Івана' з категорії IT.");
 
         system.UpdateVacancy(developerVacancy, "Старший розробник", "Розробка ПЗ", techCorp);
-        system.UpdateResume(ivanResume, "Резюме Івана", "C#, .NET, SQL", ivan);
+        system.UpdateResume(ivanResume, "Резюме Івана", "C#, .NET, SQL", ivanResume.JobSeeker);
         Console.WriteLine("Оновлено вакансію до 'Старший розробник' та резюме з новими навичками 'C#, .NET, SQL'.");
 
         List<Vacancy> sortedVacancies = system.GetSortedVacancies();
@@ -57,20 +51,22 @@ class Program
         system.PrintVacancies(sortedVacancies);
         system.PrintResumes(sortedResumes);
 
-        JobSeeker petro = new JobSeeker { FirstName = "Петро", LastName = "Сидоренко", ContactInfo = "petro@example.com" };
+        JobSeeker petro = new JobSeeker("Петро", "Сидоренко", "petro@example.com");
         system.AddJobSeeker(petro);
-        system.UpdateJobSeeker(ivan, "Іван", "Петренко", "ivan.updated@example.com");
+        system.UpdateJobSeeker(petro, "Петро", "Сидоренко", "petro.updated@example.com");
         system.RemoveJobSeeker(petro);
-        Console.WriteLine("Додано шукача 'Петро', оновлено контакт Івана, видалено Петра.");
+        Console.WriteLine("Додано шукача 'Петро', оновлено контакт 'Петро', видалено 'Петро'.");
 
-        JobSeeker? foundSeeker = system.GetJobSeeker("Марія");
+        JobSeeker anton = new JobSeeker("Антон", "Коваленко", "anton@example.com");
+        system.AddJobSeeker(anton);
+        JobSeeker? foundSeeker = system.GetJobSeeker("Антон");
         List<JobSeeker> allSeekers = system.GetAllJobSeekers();
         List<JobSeeker> sortedByName = system.GetSortedJobSeekersByName();
         Console.WriteLine($"Отримано шукача: {foundSeeker?.FirstName} {foundSeeker?.LastName}");
         system.PrintJobSeekers(allSeekers);
         system.PrintJobSeekers(sortedByName);
 
-        Company newCompany = new Company { Name = "NewTech", ContactInfo = "newtech@example.com" };
+        Company newCompany = new Company("NewTech", "newtech@example.com");
         system.AddCompany(newCompany);
         system.UpdateCompany(techCorp, "TechCorp Ltd", "contact@techcorp.com");
         system.RemoveCompany(newCompany);
