@@ -4,11 +4,6 @@ class JobManagementSystem
     private List<JobSeeker> JobSeekers = new List<JobSeeker>();
     private List<Company> Companies = new List<Company>();
 
-    public void AddCategory(Category category)
-    {
-        Categories.Add(category);
-    }
-
     public void PrintCategories(List<Category> categories)
     {
         foreach (var category in categories)
@@ -56,6 +51,11 @@ class JobManagementSystem
         {
             Console.WriteLine($"Компанія: {company.Name}, {company.ContactInfo}");
         }
+    }
+
+    public void AddCategory(Category category)
+    {
+        Categories.Add(category);
     }
 
     public void AddVacancyToCategory(string categoryName, Vacancy vacancy)
