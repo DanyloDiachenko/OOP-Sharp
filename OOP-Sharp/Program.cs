@@ -58,13 +58,19 @@ class Program
         Console.WriteLine("Додано шукача 'Петро', оновлено контакт 'Петро', видалено 'Петро'.");
 
         JobSeeker anton = new JobSeeker("Антон", "Коваленко", "anton@example.com");
+        JobSeeker maria = new JobSeeker("Марія", "Коваленко", "maria@example.com");
         system.AddJobSeeker(anton);
-        JobSeeker? foundSeeker = system.GetJobSeeker("Антон");
-        List<JobSeeker> allSeekers = system.GetAllJobSeekers();
+        system.AddJobSeeker(maria);
+        Console.WriteLine("================================================");
         List<JobSeeker> sortedByName = system.GetSortedJobSeekersByName();
-        Console.WriteLine($"Отримано шукача: {foundSeeker?.FirstName} {foundSeeker?.LastName}");
-        system.PrintJobSeekers(allSeekers);
         system.PrintJobSeekers(sortedByName);
+        Console.WriteLine("================================================");
+        /* JobSeeker? foundSeeker = system.GetJobSeeker("Антон"); */
+        List<JobSeeker> allSeekers = system.GetAllJobSeekers();
+        
+        /* Console.WriteLine($"Отримано шукача: {foundSeeker?.FirstName} {foundSeeker?.LastName}"); */
+        system.PrintJobSeekers(allSeekers);
+        
 
         Company newCompany = new Company("NewTech", "newtech@example.com");
         system.AddCompany(newCompany);
