@@ -65,13 +65,8 @@ class Program
         List<JobSeeker> sortedByName = system.GetSortedJobSeekersByName();
         system.PrintJobSeekers(sortedByName);
         Console.WriteLine("================================================");
-        /* JobSeeker? foundSeeker = system.GetJobSeeker("Антон"); */
         List<JobSeeker> allSeekers = system.GetAllJobSeekers();
-        
-        /* Console.WriteLine($"Отримано шукача: {foundSeeker?.FirstName} {foundSeeker?.LastName}"); */
         system.PrintJobSeekers(allSeekers);
-        
-
         Company newCompany = new Company("NewTech", "newtech@example.com");
         system.AddCompany(newCompany);
         system.UpdateCompany(techCorp, "TechCorp Ltd", "contact@techcorp.com");
